@@ -55,4 +55,14 @@ public class Music {
     public void setAlbum(String album) {
         this.album = album;
     }
+
+    public String toString() {
+        return " Music " + id +
+                ", path='" + path + '\'' +
+                ", title='" + title + '\'' +
+                ", duration=" + duration +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
+                '}';
+    }
 }

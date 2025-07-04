@@ -4,8 +4,8 @@ import br.com.git.musicplayer.model.entities.Music;
 
 import java.util.ArrayList;
 
-public abstract class InMemoryMusicRepository implements MusicRepository {
-    private final ArrayList<Music> musics = new ArrayList<Music>();
+public class InMemoryMusicRepository implements MusicRepository {
+    private static final ArrayList<Music> musics = new ArrayList<Music>();
 
     public ArrayList<Music> getAllMusics(){
         return musics;
