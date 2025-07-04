@@ -2,13 +2,15 @@ package br.com.git.musicplayer.model.entities;
 
 public class Music {
     private int id;
+    private String path;
     private String title;
     private int duration;
     private String artist;
     private String album;
 
-    public Music(int id, String title, int duration, String artist, String album) {
+    public Music(int id, String path, String title, int duration, String artist, String album) {
         this.id = id;
+        this.path = path;
         this.title = title;
         this.duration = duration;
         this.artist = artist;
@@ -22,6 +24,12 @@ public class Music {
     }
     public void setId(int id) {
         this.id = id;
+    }
+    public String getPath() {
+        return path;
+    }
+    public void setPath(String path) {
+        this.path = path;
     }
     public String getTitle() {
         return title;
