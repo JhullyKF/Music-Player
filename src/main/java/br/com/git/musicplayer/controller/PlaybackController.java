@@ -27,7 +27,7 @@ public class PlaybackController {
             });
             playerThread.start();
         } catch (Exception e){
-            System.out.println("    ▫ Erro ao carregar o arquivo de música: ");
+            throw new RuntimeException("    ▫ Erro ao carregar o arquivo de música: ");
         }
     }
 
