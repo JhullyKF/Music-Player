@@ -1,9 +1,5 @@
 package br.com.git.musicplayer.repository;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DatabaseConnection {
     private static final String url = "jdbc:h2:./musicplayerdb";
@@ -20,10 +16,9 @@ public class DatabaseConnection {
 
     public static void createMusicTable(){
         String sql = "CREATE TABLE IF NOT EXISTS musics (" +
-                "id INT AUTO_INCREMENT PRIMATY KEY, " +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "path VARCHAR(255) NOT NULL, " +
                 "title VARCHAR(100) NOT NULL, " +
-                "duration INT NOT NULL, " +
                 "artist VARCHAR(50) NOT NULL, " +
                 "album VARCHAR(50) NOT NULL );";
 
