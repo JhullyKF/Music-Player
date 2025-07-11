@@ -4,19 +4,20 @@ public class Music {
     private int id;
     private String path;
     private String title;
-    private int duration;
     private String artist;
     private String album;
 
-    public Music(int id, String path, String title, int duration, String artist, String album) {
+    public Music(int id, String path, String title, String artist, String album) {
         this.id = id;
         this.path = path;
-        this.title = title;
-        this.duration = duration;
-        this.artist = artist;
+        this.title = title;this.artist = artist;
         this.album = album;
     }
-    public Music() {
+    public Music(String path, String title, String artist, String album) {
+        this.path = path;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
     }
 
     public int getId() {
@@ -35,12 +36,6 @@ public class Music {
     public void setTitle(String title) {
         this.title = title;
     }
-    public int getDuration() {
-        return duration;
-    }
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
     public String getArtist() {
         return artist;
     }
@@ -58,7 +53,6 @@ public class Music {
         return " Music " + id +
                 ", path='" + path + '\'' +
                 ", title='" + title + '\'' +
-                ", duration=" + duration +
                 ", artist='" + artist + '\'' +
                 ", album='" + album + '\'' +
                 '}';
