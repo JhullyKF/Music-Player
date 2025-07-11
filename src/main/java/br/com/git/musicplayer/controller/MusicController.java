@@ -2,17 +2,15 @@ package br.com.git.musicplayer.controller;
 
 import br.com.git.musicplayer.model.entities.Music;
 import br.com.git.musicplayer.repository.InMemoryMusicRepository;
-import javazoom.jl.player.Player;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class MusicController {
     private final InMemoryMusicRepository musicRepository;
+    private final PlaybackController playbackController;
 
     public MusicController(){
         this.musicRepository = new InMemoryMusicRepository();
+        this.playbackController = new PlaybackController();
     }
 
     public void showAllMusics() {
@@ -23,59 +21,69 @@ public class MusicController {
             System.out.println("    ▫ " + music.toString());
         }
     }
+    public Music getMusicById(int id){
+        return musicRepository.getMusicById(id);
+    }
 
-    public void findMusicById(int id){
-        Music music = musicRepository.getMusicById(id);
-        try(InputStream input = new FileInputStream(music.getPath())){
-            System.out.println("    ▫ Música encontrada: ");
-            Player player = new Player(input);
-            player.play();
-        } catch (Exception e) {
-            System.out.println("    ▫ Erro ao carregar o arquivo de música: " + e.getMessage());
+    public Music getMusicByTitle(String title){
+        return musicRepository.getMusicByTitle(title.toLowerCase());
+    }
+
+    public void playMusic(Object identifier){
+        Music music;
+        if(identifier instanceof Integer){
+            music = getMusicById((int) identifier);
+        } else if (identifier instanceof String){
+            music = getMusicByTitle((String) identifier);
+        } else {
+            return;
+        }
+        if (music == null) {
+            System.out.println("    ▫ Música não encontrada.");
+            return;
+        }
+        playbackController.play(music);
+    }
+
+    public void addMusic(String path, String title, String artist, String album) {
+        if (musicRepository.addMusic(new Music(path, title, artist, album))){
+            System.out.println("    ▫ Música adicionada com sucesso");
         }
     }
 
-    public void findMusicByTitle(String title){
-        Music music = musicRepository.getMusicByTitle(title.toLowerCase());
-        try(InputStream input = new FileInputStream(music.getPath())){
-            System.out.println("    ▫ Música encontrada: ");
-            Player player = new Player(input);
-            player.play();
-        } catch (Exception e) {
-            System.out.println("Erro ao carregar o arquivo de música: " + e.getMessage());
+    public void removeMusic(Object identifier) {
+        if (identifier instanceof Integer) {
+            musicRepository.removeMusicById((int) identifier);
+        } else if (identifier instanceof String) {
+            musicRepository.removeMusicByTitle((String) identifier);
+        } else {
+            System.out.println("    ▫ Identificador inválido. Use ID ou título.");
         }
     }
 
-    public void addMusic(String path, String title, int duration, String artist, String album) {
-        int id = 1;
-        if (!(musicRepository.getAllMusics().isEmpty() || musicRepository.getAllMusics() == null)){
-            id = musicRepository.getAllMusics().size() + 1;
-        }
-        try {
-            Music newMusic = new Music(id, path, title.toLowerCase(), duration, artist, album);
-            musicRepository.addMusic(newMusic);
-            System.out.println("    ▫ Música adicionada com sucesso: " + newMusic);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    public void pauseMusic(){
+        playbackController.stop();
     }
 
-    public void removeMusicById(int id) {
-        try {
-            musicRepository.removeMusicById(id);
-            System.out.println("    ▫ Música removida com sucesso.");
-        } catch (Exception e) {
-            System.out.println("    ▫ Erro ao remover música: " + e.getMessage());
+    public void updateMusic(int id, int option, String content){
+        Music music = getMusicById(id);
+        if (music == null) {
+            System.out.println("    ▫ Música não encontrada.");
+            return;
+        }
+
+        switch (option){
+            case 1 -> music.setTitle(content);
+            case 2 -> music.setArtist(content);
+            case 3 -> music.setAlbum(content);
+            case 4 -> music.setPath(content);
+            default -> {
+                System.out.println("    ▫ Opção inválida. Tente novamente.");
+                return;
+            }
+        }
+        if (musicRepository.updateMusic(id, music)){;
+            System.out.println("    ▫ Música atualizada com sucesso.");
         }
     }
-
-    public void removeMusicByTitle(String title) {
-        try {
-            musicRepository.removeMusicByTitle(title.toLowerCase());
-            System.out.println("    ▫ Música removida com sucesso.");
-        } catch (Exception e) {
-            System.out.println("    ▫ Erro ao remover música: " + e.getMessage());
-        }
-    }
-
 }
